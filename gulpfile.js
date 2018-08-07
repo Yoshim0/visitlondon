@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+var autoprefixer = require('gulp-autoprefixer');
 
 var sourcePaths ={
 	sassSource : 'src/scss/*.scss'
@@ -13,9 +14,11 @@ var appPaths ={
 	js : 'app/js'
 }
 
+// GULP TASK 
 gulp.task('sass', function(){
 	return gulp.src(sourcePaths.sassSource)
-		.pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
+		.pipe(autoprefixer())
+		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 		.pipe(gulp.dest(appPaths.css));
 });
 
