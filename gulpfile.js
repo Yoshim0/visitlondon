@@ -4,6 +4,7 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var autoprefixer = require('gulp-autoprefixer');
 var clean = require('gulp-clean');
+var concat = require('gulp-concat');
 
 // SOURCEFILES
 var sourcePaths ={
@@ -56,10 +57,12 @@ gulp.task('sass', function(){
 // JS COMPILER
 /*
 ** Set the path to compile the files
+** Concatenate JS files into one file
 ** Set destination for compiled js files
 */
 gulp.task('scripts', ['cleanJs'], function(){
 	gulp.src(sourcePaths.jsSource)
+		.pipe(concat('main.js'))
 		.pipe(gulp.dest(appPaths.js));
 });
 
