@@ -3,20 +3,20 @@ var sass = require('gulp-sass');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
-var sourcePaths = {
+var sourcePaths ={
 	sassSource : 'src/scss/*.scss'
 }
 
-var appPaths = {
+var appPaths ={
 	root : 'app/',
-	cssSource : 'app/css',
+	css : 'app/css',
 	js : 'app/js'
 }
 
 gulp.task('sass', function(){
-	return gulp.src('sourcePaths.sassSource')
+	return gulp.src(sourcePaths.sassSource)
 		.pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
-		.pipe(gulp.dest('appPaths.css'));
+		.pipe(gulp.dest(appPaths.css));
 });
 
 gulp.task('serve', ['sass'], function(){
@@ -27,4 +27,8 @@ gulp.task('serve', ['sass'], function(){
 	})
 });
 
-gulp.task('default', ['serve']);
+gulp.task('watch', ['serve', 'sass'], function(){
+	gulp.watch([sourcePaths.sassSource], ['sass']);
+});
+
+gulp.task('default', ['watch']);
