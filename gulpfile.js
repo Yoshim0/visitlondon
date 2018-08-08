@@ -17,6 +17,8 @@ var newer = require('gulp-newer'); // Check for newer content / images
 var imagemin = require('gulp-imagemin'); // Image minification
 var injectPartials = require('gulp-inject-partials'); // inject code into html
 var minify = require('gulp-minify'); // minifies JS files
+var cssMin = require('gulp-min'); // Minifies CSS
+var rename = require('gulp-rename'); // Rename files
 
 // SOURCEFILES
 var sourcePaths ={
@@ -71,7 +73,7 @@ gulp.task('sass', function(){
 
 	sassFiles = gulp.src(sourcePaths.sassSource)
 		.pipe(autoprefixer())
-		.pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+		.pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
 		
     return merge(bootstrapCss, sassFiles)
       .pipe(concat('app.css'))
@@ -101,6 +103,8 @@ gulp.task('scripts', ['cleanJs'], function(){
 		.pipe(gulp.dest(appPaths.js));
 });
 
+/* PRODUCTION TASKS */
+
 // JS MINIFIER
 /*
 ** Set the path to compile the files
@@ -115,9 +119,32 @@ gulp.task('compress', function(){
     .pipe(gulp.dest(appPaths.js));
 });
 
+// CSS MINIFIER
+/*
+** Minify CSS after Concat and rename with suffix ".min"
+*/
+gulp.task('compressCss', function(){
+  var bootstrapCss = gulp.src('./node_modules/bootstrap/dist/css/bootstrap.css');
+  var sassFiles;
+
+  sassFiles = gulp.src(sourcePaths.sassSource)
+    .pipe(autoprefixer())
+    .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    
+    return merge(bootstrapCss, sassFiles)
+      .pipe(concat('app.css'))
+      .pipe(cssMin())
+      .pipe(rename({suffix: '.min'}))
+      .pipe(gulp.dest(appPaths.css));
+});
+
+/* END OF PRODUCTION TASKS */
+
 // INJECT PARTIALS
 /*
-**
+** Set the path files to inject
+** Inject partials
+** Set destination for compiled html files
 */
 gulp.task('html', function(){
   return gulp.src(sourcePaths.htmlSource)
@@ -170,7 +197,7 @@ gulp.task('serve', ['sass'], function(){
 ** Watch changed files and execute tasks
 ** Copy HTML files
 */
-gulp.task('watch', ['serve', 'sass', 'cleanHtml','cleanJs', 'scripts', 'moveFonts', 'images', 'html', 'compress'], function(){
+gulp.task('watch', ['serve', 'sass', 'cleanHtml','cleanJs', 'scripts', 'moveFonts', 'images', 'html'], function(){
 	gulp.watch([sourcePaths.sassSource], ['sass']);
 	// gulp.watch([sourcePaths.htmlSource], ['copy']);
 	gulp.watch([sourcePaths.jsSource], ['scripts']);
