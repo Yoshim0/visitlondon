@@ -212,7 +212,6 @@ gulp.task('serve', ['sass'], function(){
 */
 gulp.task('watch', ['serve', 'sass', 'cleanHtml','cleanJs', 'scripts', 'moveFonts', 'images', 'html'], function(){
 	gulp.watch([sourcePaths.sassSource], ['sass']);
-	// gulp.watch([sourcePaths.htmlSource], ['copy']);
 	gulp.watch([sourcePaths.jsSource], ['scripts']);
   gulp.watch([sourcePaths.imgSource], ['images']);
   gulp.watch([sourcePaths.htmlSource, sourcePaths.htmlPartialSource], ['html']);
@@ -223,3 +222,5 @@ gulp.task('watch', ['serve', 'sass', 'cleanHtml','cleanJs', 'scripts', 'moveFont
 ** Execute previous task all at once
 */
 gulp.task('default', ['watch']);
+
+gulp.task('production', ['htmlMin', 'compressCss', 'compress'])
