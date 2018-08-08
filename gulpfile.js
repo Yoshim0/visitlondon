@@ -111,7 +111,7 @@ gulp.task('moveFonts', function(){
 */
 gulp.task('scripts', ['cleanJs'], function(){
 	gulp.src(sourcePaths.jsSource)
-		.pipe(concat('main.js'))
+		.pipe(concat('main-min.js'))
     .pipe(browserify())
 		.pipe(gulp.dest(appPaths.js));
 });
@@ -170,7 +170,7 @@ gulp.task('compressCss', function(){
 */
 gulp.task('compress', function(){
   gulp.src(sourcePaths.jsSource)
-    .pipe(concat('main.js'))
+    .pipe(concat('main-min.js'))
     .pipe(browserify())
     .pipe(minify())
     .pipe(gulp.dest(appPaths.js));
