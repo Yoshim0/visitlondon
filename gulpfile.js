@@ -13,13 +13,15 @@ var clean = require('gulp-clean'); // Clean Files
 var concat = require('gulp-concat'); // Concatenate files
 var browserify = require('gulp-browserify'); // Lets you require modules in the browser by bundling up all of you dependencies
 var merge = require('merge-stream'); // Concatenate CSS files
-var newer = require('gulp-newer'); // 
-var imagemin = require('gulp-imagemin');
+var newer = require('gulp-newer'); // Check for newer content / images
+var imagemin = require('gulp-imagemin'); // Image minification
+var injectPartials = require('gulp-inject-partials'); // inject code into html
 
 // SOURCEFILES
 var sourcePaths ={
 	sassSource : 'src/scss/*.scss',
 	htmlSource : 'src/*.html',
+  htmlPartialSource : 'src/partials/*.html',
 	jsSource : 'src/js/**',
   fontsSource : 'src/fonts',
   imgSource : 'src/img/**'
@@ -98,16 +100,29 @@ gulp.task('scripts', ['cleanJs'], function(){
 		.pipe(gulp.dest(appPaths.js));
 });
 
-// HTML COPY
+// INJECT PARTIALS
+/*
+**
+*/
+gulp.task('html', function(){
+  return gulp.src(sourcePaths.htmlSource)
+    .pipe(injectPartials())
+    .pipe(gulp.dest(appPaths.root))
+});
+
+/**********************************************/
+// HTML COPY / IS NOT NEEDED WEH USING PARTIALS
 /*
 ** Set the path to copy files from
 ** Clear unused files
 ** Set destination to copy files to.
 */
-gulp.task('copy', ['cleanHtml'], function(){
-	gulp.src(sourcePaths.htmlSource)
-		.pipe(gulp.dest(appPaths.root))
-});
+
+// gulp.task('copy', ['cleanHtml'], function(){
+// 	gulp.src(sourcePaths.htmlSource)
+// 		.pipe(gulp.dest(appPaths.root))
+// });
+/**********************************************/
 
 // IMAGES
 /*
@@ -140,11 +155,12 @@ gulp.task('serve', ['sass'], function(){
 ** Watch changed files and execute tasks
 ** Copy HTML files
 */
-gulp.task('watch', ['serve', 'sass', 'copy', 'cleanHtml','cleanJs', 'scripts', 'moveFonts', 'images'], function(){
+gulp.task('watch', ['serve', 'sass', 'cleanHtml','cleanJs', 'scripts', 'moveFonts', 'images', 'html'], function(){
 	gulp.watch([sourcePaths.sassSource], ['sass']);
-	gulp.watch([sourcePaths.htmlSource], ['copy']);
+	// gulp.watch([sourcePaths.htmlSource], ['copy']);
 	gulp.watch([sourcePaths.jsSource], ['scripts']);
   gulp.watch([sourcePaths.imgSource], ['images']);
+  gulp.watch([sourcePaths.htmlSource, sourcePaths.htmlPartialSource], ['html']);
 });
 
 // GULP DEFAULT TASK
