@@ -13,13 +13,16 @@ var clean = require('gulp-clean'); // Clean Files
 var concat = require('gulp-concat'); // Concatenate files
 var browserify = require('gulp-browserify'); // Lets you require modules in the browser by bundling up all of you dependencies
 var merge = require('merge-stream'); // Concatenate CSS files
+var newer = require('gulp-newer'); // 
+var imagemin = require('gulp-imagemin');
 
 // SOURCEFILES
 var sourcePaths ={
 	sassSource : 'src/scss/*.scss',
 	htmlSource : 'src/*.html',
-	jsSource : 'src/js/*.js',
-  fontsSource : 'src/fonts'
+	jsSource : 'src/js/**',
+  fontsSource : 'src/fonts',
+  imgSource : 'src/img/**'
 }
 
 // APP FILES
@@ -27,7 +30,8 @@ var appPaths ={
 	root : 'app/',
 	css : 'app/css',
 	js : 'app/js',
-  fonts : 'app/fonts'
+  fonts : 'app/fonts',
+  img : 'app/img'
 }
 
 // CLEAR UNUSED HTML FILES
@@ -61,7 +65,6 @@ gulp.task('cleanJs', function(){
 gulp.task('sass', function(){
   var bootstrapCss = gulp.src('./node_modules/bootstrap/dist/css/bootstrap.css');
   var sassFiles;
-
 
 	sassFiles = gulp.src(sourcePaths.sassSource)
 		.pipe(autoprefixer())
@@ -106,6 +109,20 @@ gulp.task('copy', ['cleanHtml'], function(){
 		.pipe(gulp.dest(appPaths.root))
 });
 
+// IMAGES
+/*
+** Set source path for images
+** Look for newer images
+** Initiate imageminifycation
+** copy images to app folder
+*/
+gulp.task('images', function(){ 
+  return gulp.src(sourcePaths.imgSource)
+    .pipe(newer(appPaths.img))
+    .pipe(imagemin())
+    .pipe(gulp.dest(appPaths.img));
+});
+
 // BROWSERSYNC
 /*
 ** Initialize the folders for sync in Browser
@@ -123,10 +140,11 @@ gulp.task('serve', ['sass'], function(){
 ** Watch changed files and execute tasks
 ** Copy HTML files
 */
-gulp.task('watch', ['serve', 'sass', 'copy', 'cleanHtml','cleanJs', 'scripts', 'moveFonts'], function(){
+gulp.task('watch', ['serve', 'sass', 'copy', 'cleanHtml','cleanJs', 'scripts', 'moveFonts', 'images'], function(){
 	gulp.watch([sourcePaths.sassSource], ['sass']);
 	gulp.watch([sourcePaths.htmlSource], ['copy']);
 	gulp.watch([sourcePaths.jsSource], ['scripts']);
+  gulp.watch([sourcePaths.imgSource], ['images']);
 });
 
 // GULP DEFAULT TASK
