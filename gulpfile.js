@@ -18,14 +18,16 @@ var merge = require('merge-stream'); // Concatenate CSS files
 var sourcePaths ={
 	sassSource : 'src/scss/*.scss',
 	htmlSource : 'src/*.html',
-	jsSource : 'src/js/*.js'
+	jsSource : 'src/js/*.js',
+  fontsSource : 'src/fonts'
 }
 
 // APP FILES
 var appPaths ={
 	root : 'app/',
 	css : 'app/css',
-	js : 'app/js'
+	js : 'app/js',
+  fonts : 'app/fonts'
 }
 
 // CLEAR UNUSED HTML FILES
@@ -70,6 +72,16 @@ gulp.task('sass', function(){
       .pipe(gulp.dest(appPaths.css));
 });
 
+// MOVE FONTS
+/*
+** Set the path to copy the files
+** Set destination for copied fonts
+*/
+gulp.task('moveFonts', function(){
+  gulp.src(sourcePaths.fontsSource + '/*.{eot,svg,ttf,woff,woff2}')
+    .pipe(gulp.dest(appPaths.fonts));
+});
+
 // JS COMPILER
 /*
 ** Set the path to compile the files
@@ -111,7 +123,7 @@ gulp.task('serve', ['sass'], function(){
 ** Watch changed files and execute tasks
 ** Copy HTML files
 */
-gulp.task('watch', ['serve', 'sass', 'copy', 'cleanHtml', 'scripts', 'cleanJs'], function(){
+gulp.task('watch', ['serve', 'sass', 'copy', 'cleanHtml','cleanJs', 'scripts', 'moveFonts'], function(){
 	gulp.watch([sourcePaths.sassSource], ['sass']);
 	gulp.watch([sourcePaths.htmlSource], ['copy']);
 	gulp.watch([sourcePaths.jsSource], ['scripts']);
