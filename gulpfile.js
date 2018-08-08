@@ -1,3 +1,9 @@
+/*
+** V1.0.0 - 07/08/2018
+** Gulp WorkFlow created by Yoshi Mortelmans
+** Using: Gulp, Sass, BrowserSync, AutoPrefixer, Clean, Concat, Browserify and Merge stream
+*/
+
 var gulp = require('gulp'); // Initiate Gulp
 var sass = require('gulp-sass'); // Gulp Sass Compiler
 var browserSync = require('browser-sync'); // Sync with Browser
@@ -12,7 +18,7 @@ var merge = require('merge-stream'); // Concatenate CSS files
 var sourcePaths ={
 	sassSource : 'src/scss/*.scss',
 	htmlSource : 'src/*.html',
-	jsSource : 'src/js/**'
+	jsSource : 'src/js/*.js'
 }
 
 // APP FILES
@@ -44,10 +50,11 @@ gulp.task('cleanJs', function(){
 
 // SASS COMPILER
 /*
-** Set the path to compile the files
+** Define Vars for Bootstrap and SassFiles
+** SassFiles equals to the sourcepath to compile the files
 ** Autoprefix before compile
 ** Output compressed, nested, expanded
-** Set destination for compiled css files
+** Return / merge all files --> concatenate and create compiled file in set location
 */
 gulp.task('sass', function(){
   var bootstrapCss = gulp.src('./node_modules/bootstrap/dist/css/bootstrap.css');
