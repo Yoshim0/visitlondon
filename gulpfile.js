@@ -19,6 +19,7 @@ var injectPartials = require('gulp-inject-partials'); // inject code into html
 var minify = require('gulp-minify'); // minifies JS files
 var cssMin = require('gulp-min'); // Minifies CSS
 var rename = require('gulp-rename'); // Rename files
+var htmlMin = require('gulp-htmlmin'); // Minifiy HTML
 
 // SOURCEFILES
 var sourcePaths ={
@@ -38,6 +39,18 @@ var appPaths ={
   fonts : 'app/fonts',
   img : 'app/img'
 }
+
+// INJECT PARTIALS
+/*
+** Set the path files to inject
+** Inject partials
+** Set destination for compiled html files
+*/
+gulp.task('html', function(){
+  return gulp.src(sourcePaths.htmlSource)
+    .pipe(injectPartials())
+    .pipe(gulp.dest(appPaths.root))
+});
 
 // CLEAR UNUSED HTML FILES
 /*
@@ -103,20 +116,31 @@ gulp.task('scripts', ['cleanJs'], function(){
 		.pipe(gulp.dest(appPaths.js));
 });
 
+// IMAGES
+/*
+** Set source path for images
+** Look for newer images
+** Initiate imageminifycation
+** copy images to app folder
+*/
+gulp.task('images', function(){ 
+  return gulp.src(sourcePaths.imgSource)
+    .pipe(newer(appPaths.img))
+    .pipe(imagemin())
+    .pipe(gulp.dest(appPaths.img));
+});
+
 /* PRODUCTION TASKS */
 
-// JS MINIFIER
+// HTML MINIFIER
 /*
-** Set the path to compile the files
-** Concatenate JS files into one file
-** Set destination for compiled js files
+** Inject partials
 */
-gulp.task('compress', function(){
-  gulp.src(sourcePaths.jsSource)
-    .pipe(concat('main.js'))
-    .pipe(browserify())
-    .pipe(minify())
-    .pipe(gulp.dest(appPaths.js));
+gulp.task('htmlMin', function(){
+  return gulp.src(sourcePaths.htmlSource)
+    .pipe(injectPartials())
+    .pipe(htmlMin({collapseWhitespace: true}))
+    .pipe(gulp.dest(appPaths.root))
 });
 
 // CSS MINIFIER
@@ -138,19 +162,21 @@ gulp.task('compressCss', function(){
       .pipe(gulp.dest(appPaths.css));
 });
 
-/* END OF PRODUCTION TASKS */
-
-// INJECT PARTIALS
+// JS MINIFIER
 /*
-** Set the path files to inject
-** Inject partials
-** Set destination for compiled html files
+** Set the path to compile the files
+** Concatenate JS files into one file
+** Set destination for compiled js files
 */
-gulp.task('html', function(){
-  return gulp.src(sourcePaths.htmlSource)
-    .pipe(injectPartials())
-    .pipe(gulp.dest(appPaths.root))
+gulp.task('compress', function(){
+  gulp.src(sourcePaths.jsSource)
+    .pipe(concat('main.js'))
+    .pipe(browserify())
+    .pipe(minify())
+    .pipe(gulp.dest(appPaths.js));
 });
+
+/* END OF PRODUCTION TASKS */
 
 /**********************************************/
 // HTML COPY / IS NOT NEEDED WEH USING PARTIALS
@@ -166,19 +192,6 @@ gulp.task('html', function(){
 // });
 /**********************************************/
 
-// IMAGES
-/*
-** Set source path for images
-** Look for newer images
-** Initiate imageminifycation
-** copy images to app folder
-*/
-gulp.task('images', function(){ 
-  return gulp.src(sourcePaths.imgSource)
-    .pipe(newer(appPaths.img))
-    .pipe(imagemin())
-    .pipe(gulp.dest(appPaths.img));
-});
 
 // BROWSERSYNC
 /*
