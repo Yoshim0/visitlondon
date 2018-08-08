@@ -16,6 +16,7 @@ var merge = require('merge-stream'); // Concatenate CSS files
 var newer = require('gulp-newer'); // Check for newer content / images
 var imagemin = require('gulp-imagemin'); // Image minification
 var injectPartials = require('gulp-inject-partials'); // inject code into html
+var minify = require('gulp-minify'); // minifies JS files
 
 // SOURCEFILES
 var sourcePaths ={
@@ -100,6 +101,20 @@ gulp.task('scripts', ['cleanJs'], function(){
 		.pipe(gulp.dest(appPaths.js));
 });
 
+// JS MINIFIER
+/*
+** Set the path to compile the files
+** Concatenate JS files into one file
+** Set destination for compiled js files
+*/
+gulp.task('compress', function(){
+  gulp.src(sourcePaths.jsSource)
+    .pipe(concat('main.js'))
+    .pipe(browserify())
+    .pipe(minify())
+    .pipe(gulp.dest(appPaths.js));
+});
+
 // INJECT PARTIALS
 /*
 **
@@ -155,7 +170,7 @@ gulp.task('serve', ['sass'], function(){
 ** Watch changed files and execute tasks
 ** Copy HTML files
 */
-gulp.task('watch', ['serve', 'sass', 'cleanHtml','cleanJs', 'scripts', 'moveFonts', 'images', 'html'], function(){
+gulp.task('watch', ['serve', 'sass', 'cleanHtml','cleanJs', 'scripts', 'moveFonts', 'images', 'html', 'compress'], function(){
 	gulp.watch([sourcePaths.sassSource], ['sass']);
 	// gulp.watch([sourcePaths.htmlSource], ['copy']);
 	gulp.watch([sourcePaths.jsSource], ['scripts']);
