@@ -1,0 +1,40 @@
+table {
+	width: 100%;
+	text-align: left;
+	font-size: $table-font-size;
+	border-collapse: collapse;
+
+	// '>' find first child with this tag
+	> caption  {
+		text-align: left;
+		font-family: $table-font-family-caption;
+		font-size: $table-font-size-caption;
+		padding: 5px;
+		color: $table-font-color-caption;
+		margin-bottom: 20px;
+	}
+
+	thead tr th {
+		background-color: darken($blue, 20);
+		color: $white;
+		font-size: 16px;
+	}
+	> thead,
+	> tbody {
+		> tr {
+			color: $table-color;
+			background-color: $dark-blue;
+			&:nth-child(odd) {
+				background-color: $blue;
+			}
+			&:hover {
+				background-color: $table-hover-bg-color;
+			}
+			td,
+			th {
+				padding: 10px;
+				border-bottom: 1px dotted $dark-blue;
+			}
+		}
+	}	
+}

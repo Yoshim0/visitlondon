@@ -1,5 +1,4 @@
 global.jQuery = require('jquery');
-bootstrap = require('bootstrap');
 mustache = require('mustache');
 
 // JSON = JS Object Notation / mustache

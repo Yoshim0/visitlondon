@@ -1,0 +1,35 @@
+// GRID AND RESPONSIVE
+$breakpoints: (
+	phone: 480px,
+	tablet: 768px,
+	desktop: 1024px
+);
+
+$columns: 12;
+$grid-max-width: 1200px; 
+
+// Check in class for 'column-'
+[class*='column-'] {
+	@include border-box;
+	float: left;
+	padding: 1em;
+	width: 100%
+}
+
+@include tablet {
+	@for $i from 1 through $columns {
+
+		.medium-column-#{$i} {
+			width: 100% / $columns * $i;
+		}
+	}
+}
+
+@include desktop {
+	@for $i from 1 through $columns {
+		
+		.large-column-#{$i} {
+			width: 100% / $columns * $i;
+		}
+	}
+}

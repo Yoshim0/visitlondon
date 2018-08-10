@@ -24,6 +24,7 @@ var htmlMin = require('gulp-htmlmin'); // Minifiy HTML
 // SOURCEFILES
 var sourcePaths ={
 	sassSource : 'src/scss/*.scss',
+  sassApp : 'src/scss/app.scss',
 	htmlSource : 'src/*.html',
   htmlPartialSource : 'src/partials/*.html',
 	jsSource : 'src/js/**',
@@ -81,16 +82,12 @@ gulp.task('cleanJs', function(){
 ** Return / merge all files --> concatenate and create compiled file in set location
 */
 gulp.task('sass', function(){
-  var bootstrapCss = gulp.src('./node_modules/bootstrap/dist/css/bootstrap.css');
-  var sassFiles;
 
-	sassFiles = gulp.src(sourcePaths.sassSource)
+	sassFiles = gulp.src(sourcePaths.sassApp)
 		.pipe(autoprefixer())
 		.pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
-		
-    return merge(bootstrapCss, sassFiles)
-      .pipe(concat('app.css'))
-      .pipe(gulp.dest(appPaths.css));
+    .pipe(concat('app.css'))
+    .pipe(gulp.dest(appPaths.css));
 });
 
 // MOVE FONTS
@@ -148,18 +145,14 @@ gulp.task('htmlMin', function(){
 ** Minify CSS after Concat and rename with suffix ".min"
 */
 gulp.task('compressCss', function(){
-  var bootstrapCss = gulp.src('./node_modules/bootstrap/dist/css/bootstrap.css');
-  var sassFiles;
 
   sassFiles = gulp.src(sourcePaths.sassSource)
     .pipe(autoprefixer())
     .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-    
-    return merge(bootstrapCss, sassFiles)
-      .pipe(concat('app.css'))
-      .pipe(cssMin())
-      .pipe(rename({suffix: '.min'}))
-      .pipe(gulp.dest(appPaths.css));
+    .pipe(concat('app.css'))
+    .pipe(cssMin())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest(appPaths.css));
 });
 
 // JS MINIFIER

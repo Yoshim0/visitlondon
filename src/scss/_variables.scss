@@ -1,0 +1,69 @@
+// COLORS
+$white: 	#FFFFFF;
+$black: 	#000000;
+$blue: 		#0076A3;
+$dark-blue: darken($blue, 10);
+$light-blue: lighten($blue, 10);
+$yellow: 	#FFBA00;
+$green: 	#54AC27;
+$red: 		#FE2D28;
+
+// BG COLORS
+$bg-color: $blue;
+$bg-footer: $dark-blue;
+$nav-bg-color: $dark-blue;
+
+// TEXT
+$paragraph-font-family: 'Open Sans', sans-serif;
+$paragraph-font-size: 16px;
+$text-color: $black;
+
+// HEADING
+$heading-font-family: 'Bitter', serif;
+$heading-color: $yellow;
+
+$h1-font-size: 24px;
+$h2-font-size: 20px;
+$h3-font-size: 16px;
+
+$heading-font-size: (
+	h1: 40px,
+	h2: 36px,
+	h3: 32px,
+	h4: 28px,
+	h5: 24px,
+	h6: 20px
+);
+
+h1,h2,h3,h4,h5,h6 {
+	color: $heading-color;
+	font-family: $heading-font-family;
+	font-weight: 700; 
+}
+
+// LINKS
+$anchor-font-size: 18px;
+
+// BUTTON
+$btn-font-size: 14px;
+$btn-font-weight: 700;
+
+// VISIT
+$visit-border-color: $white;
+$visit-heading-color: lighten($yellow, 10);
+$visit-text-color: $white;
+
+// CARD
+$card-bg-color: $white;
+
+// TABLES
+$table-font-size: 14px;
+$table-font-family-caption: $heading-font-family;
+$table-font-size-caption: map-get($heading-font-size, h2);
+$table-font-color-caption: $yellow;
+$table-color: $white;
+$table-hover-bg-color: darken($yellow, 5);
+
+// FOOTER
+$footer-color: $white;
+
